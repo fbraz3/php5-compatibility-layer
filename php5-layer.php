@@ -639,7 +639,6 @@ if ( ! function_exists ('mysql_connect') ) {
     /**
      * Selects a database and executes a query on it
      * @link http://php.net/manual/en/function.mysql-db-query.php
-     
      * @param string $database <p>
      * The name of the database that will be selected.
      * </p>
