@@ -727,25 +727,7 @@ if ( ! function_exists ('mysql_connect') ) {
         }
 
         return mysqli_error ($c);
-    }
-
-
-    if(!function_exists('mysql_escape_string')) {
-        /**
-         * Escapes a string for use in a mysql_query
-         * @link http://php.net/manual/en/function.mysql-escape-string.php
-         * @param string $unescaped_string <p>
-         * The string that is to be escaped.
-         * </p>
-         * @return string the escaped string.
-         * @since 4.0.3
-         * @since 5.0
-         */
-        function mysql_escape_string($escape)
-        {
-            return mysqli_real_escape_string($GLOBALS['_MySQLCON_'], $escape);
-        }
-    }
+    }   
 
     /**
      * Fetch a result row as an associative array, a numeric array, or both
@@ -1594,26 +1576,55 @@ if ( ! function_exists ('mysql_connect') ) {
 
         return mysqli_query ($c, $query);
     }
+    
+    if (!function_exists('mres')) {
+        /**
+         * Escape the same strings from mysql_real_escape_string, but this function does not need an active connection =)
+         * "Characters encoded are \, ', ", NUL (ASCII 0), \n, \r, and Control+Z"
+         * @see https://dev.mysql.com/doc/refman/5.7/en/mysql-real-escape-string.html
+         * @see https://stackoverflow.com/questions/1162491/alternative-to-mysql-real-escape-string-without-connecting-to-db
+         * @param string $value
+         * @return string
+         */
+        function mres($value)
+        {
+            $search = array("\\", "\x00", "\n", "\r", "'", '"', "\x1a");
+            $replace = array("\\\\", "\\0", "\\n", "\\r", "\'", '\"', "\\Z");
 
-    if(!function_exists('mysql_real_escape_string')) {
+            return str_replace($search, $replace, $value);
+        }
+    }
+
+    if (!function_exists('mysql_real_escape_string')) {
         /**
          * Escapes special characters in a string for use in an SQL statement
          * @link http://php.net/manual/en/function.mysql-real-escape-string.php
-         * @param string $unescaped_string <p>
          * The string that is to be escaped.
          * </p>
-         * @param resource $link_identifier [optional]
          * @return string the escaped string, or false on error.
          * @since 4.3.0
          * @since 5.0
          */
-        function mysql_real_escape_string($escape, $c = null)
+        function mysql_real_escape_string($value)
         {
-            if (($c = mysql_global_resource($c, 2 - func_num_args())) == null) {
-                return;
-            }
-
-            return mysqli_real_escape_string($c, $escape);
+            return mres($value);
+        }
+    }
+    
+    if (!function_exists('mysql_escape_string')) {
+        /**
+         * Escapes a string for use in a mysql_query
+         * @link http://php.net/manual/en/function.mysql-escape-string.php
+         * @deprecated 5.3.0 Use mysql_real_escape_string() instead
+         * The string that is to be escaped.
+         * </p>
+         * @return string the escaped string.
+         * @since 4.0.3
+         * @since 5.0
+         */
+        function mysql_escape_string($value)
+        {
+            return mres($value);
         }
     }
 
