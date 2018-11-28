@@ -1,269 +1,59 @@
 <?php
-#
-# General Functions
-#
-if (!function_exists('ereg')) {
-    /**
-     * Regular expression match
-     * @link http://php.net/manual/en/function.ereg.php
-     * @param string $pattern <p>
-     * Case sensitive regular expression.
-     * </p>
-     * @param string $string <p>
-     * The input string.
-     * </p>
-     * @param array $regs [optional] <p>
-     * If matches are found for parenthesized substrings of
-     * <i>pattern</i> and the function is called with the
-     * third argument <i>regs</i>, the matches will be stored
-     * in the elements of the array <i>regs</i>.
-     * </p>
-     * <p>
-     * $regs[1] will contain the substring which starts at
-     * the first left parenthesis; $regs[2] will contain
-     * the substring starting at the second, and so on.
-     * $regs[0] will contain a copy of the complete string
-     * matched.
-     * </p>
-     * @return int the length of the matched string if a match for
-     * <i>pattern</i> was found in <i>string</i>,
-     * or <b>FALSE</b> if no matches were found or an error occurred.
-     * </p>
-     * <p>
-     * If the optional parameter <i>regs</i> was not passed or
-     * the length of the matched string is 0, this function returns 1.
-     * @since 4.0
-     * @since 5.0
-     */
-    function ereg($pattern, $subject, &$matches = array()){
-        return preg_match('/' . $pattern . '/', $subject, $matches);
-    }
-}
+/*
+ * This is deprecated MySQL API wrapper
+ *
+ * Author: JoungKyun.Kim <http://oops.org>
+ * Copyright (c) 2016 JoungKyun.Kim
+ * License: BSD 2-Clause
+ *
+ * $Id: $
+ *
+ * Warning!
+ *
+ * 1. You must enable mysqli extension.
+ * 2. PHP 4.1 <= PHP VERSION <= PHP7
+ * 2. If you check return value by mysql_connect and mysql_result with is_resource(),
+ *    you must change to is_myresource() from is_resource().
+ *
+ */
 
-if (!function_exists('eregi')) {
-    /**
-     * Replace regular expression case insensitive
-     * @link http://php.net/manual/en/function.eregi-replace.php
-     * @param string $pattern <p>
-     * A POSIX extended regular expression.
-     * </p>
-     * @param string $replacement <p>
-     * If <i>pattern</i> contains parenthesized substrings,
-     * <i>replacement</i> may contain substrings of the form
-     * \digit, which will be
-     * replaced by the text matching the digit'th parenthesized substring;
-     * \0 will produce the entire contents of string.
-     * Up to nine substrings may be used. Parentheses may be nested, in which
-     * case they are counted by the opening parenthesis.
-     * </p>
-     * @param string $string <p>
-     * The input string.
-     * </p>
-     * @return string The modified string is returned. If no matches are found in
-     * <i>string</i>, then it will be returned unchanged.
-     * @since 4.0
-     * @since 5.0
-     */
-    function eregi($pattern, $subject, &$matches = array()){
-        return preg_match('/' . $pattern . '/i', $subject, $matches);
-    }
-}
-if (!function_exists('ereg_replace')){
-    /**
-     * Replace regular expression
-     * @link http://php.net/manual/en/function.ereg-replace.php
-     * @param string $pattern <p>
-     * A POSIX extended regular expression.
-     * </p>
-     * @param string $replacement <p>
-     * If <i>pattern</i> contains parenthesized substrings,
-     * <i>replacement</i> may contain substrings of the form
-     * \digit, which will be
-     * replaced by the text matching the digit'th parenthesized substring;
-     * \0 will produce the entire contents of string.
-     * Up to nine substrings may be used. Parentheses may be nested, in which
-     * case they are counted by the opening parenthesis.
-     * </p>
-     * @param string $string <p>
-     * The input string.
-     * </p>
-     * @return string The modified string is returned. If no matches are found in
-     * <i>string</i>, then it will be returned unchanged.
-     * @since 4.0
-     * @since 5.0
-     */
-    function ereg_replace($pattern, $replacement, $string){
-        return preg_replace('/' . $pattern . '/', $replacement, $string);
-    }
-}
-if (!function_exists('eregi_replace')) {
-    /**
-     * Replace regular expression case insensitive
-     * @link http://php.net/manual/en/function.eregi-replace.php
-     * @param string $pattern <p>
-     * A POSIX extended regular expression.
-     * </p>
-     * @param string $replacement <p>
-     * If <i>pattern</i> contains parenthesized substrings,
-     * <i>replacement</i> may contain substrings of the form
-     * \digit, which will be
-     * replaced by the text matching the digit'th parenthesized substring;
-     * \0 will produce the entire contents of string.
-     * Up to nine substrings may be used. Parentheses may be nested, in which
-     * case they are counted by the opening parenthesis.
-     * </p>
-     * @param string $string <p>
-     * The input string.
-     * </p>
-     * @return string The modified string is returned. If no matches are found in
-     * <i>string</i>, then it will be returned unchanged.
-     * @since 4.0
-     * @since 5.0
-     */
-    function eregi_replace($pattern, $replacement, $string){
-        return preg_replace('/' . $pattern . '/i', $replacement, $string);
-    }
-}
+/**
+ * @param $o
+ * @param bool $onlyres
+ * @return bool
+ */
+function is_myresource ($o, $onlyres = false) {
+    if ( extension_loaded ('mysql') ) {
+        if ( ! is_resource ($o) )
+            return false;
 
-if (!function_exists('split')) {
-    /**
-     * Split string into array by regular expression
-     * @link http://php.net/manual/en/function.split.php
-     * @param string $pattern <p>
-     * Case sensitive regular expression.
-     * </p>
-     * <p>
-     * If you want to split on any of the characters which are considered
-     * special by regular expressions, you'll need to escape them first. If
-     * you think <b>split</b> (or any other regex function, for
-     * that matter) is doing something weird, please read the file
-     * regex.7, included in the
-     * regex/ subdirectory of the PHP distribution. It's
-     * in manpage format, so you'll want to do something along the lines of
-     * man /usr/local/src/regex/regex.7 in order to read it.
-     * </p>
-     * @param string $string <p>
-     * The input string.
-     * </p>
-     * @param int $limit [optional] <p>
-     * If <i>limit</i> is set, the returned array will
-     * contain a maximum of <i>limit</i> elements with the
-     * last element containing the whole rest of
-     * <i>string</i>.
-     * </p>
-     * @return array an array of strings, each of which is a substring of
-     * <i>string</i> formed by splitting it on boundaries formed
-     * by the case-sensitive regular expression <i>pattern</i>.
-     * </p>
-     * <p>
-     * If there are n occurrences of
-     * <i>pattern</i>, the returned array will contain
-     * n+1 items. For example, if
-     * there is no occurrence of <i>pattern</i>, an array with
-     * only one element will be returned. Of course, this is also true if
-     * <i>string</i> is empty. If an error occurs,
-     * <b>split</b> returns <b>FALSE</b>.
-     * @since 4.0
-     * @since 5.0
-     */
-    function split($pattern, $subject, $limit = -1){
-        return preg_split('/' . $pattern . '/', $subject, $limit);
-    }
-}
-if (!function_exists('spliti')) {
-    /**
-     * Split string into array by regular expression case insensitive
-     * @link http://php.net/manual/en/function.spliti.php
-     * @param string $pattern <p>
-     * Case insensitive regular expression.
-     * </p>
-     * <p>
-     * If you want to split on any of the characters which are considered
-     * special by regular expressions, you'll need to escape them first. If
-     * you think <b>spliti</b> (or any other regex function, for
-     * that matter) is doing something weird, please read the file
-     * regex.7, included in the
-     * regex/ subdirectory of the PHP distribution. It's
-     * in manpage format, so you'll want to do something along the lines of
-     * man /usr/local/src/regex/regex.7 in order to read it.
-     * </p>
-     * @param string $string <p>
-     * The input string.
-     * </p>
-     * @param int $limit [optional] <p>
-     * If <i>limit</i> is set, the returned array will
-     * contain a maximum of <i>limit</i> elements with the
-     * last element containing the whole rest of
-     * <i>string</i>.
-     * </p>
-     * @return array an array of strings, each of which is a substring of
-     * <i>string</i> formed by splitting it on boundaries formed
-     * by the case insensitive regular expression <i>pattern</i>.
-     * </p>
-     * <p>
-     * If there are n occurrences of
-     * <i>pattern</i>, the returned array will contain
-     * n+1 items. For example, if
-     * there is no occurrence of <i>pattern</i>, an array with
-     * only one element will be returned. Of course, this is also true if
-     * <i>string</i> is empty. If an error occurs,
-     * <b>spliti</b> returns <b>FALSE</b>.
-     * @since 4.0.1
-     * @since 5.0
-     */
-    function spliti($pattern, $subject, $limit = -1){
-        return preg_split('/' . $pattern . '/i', $subject, $limit);
-    }
-}
+        $cname = get_resource_type ($o);
+        if ( $cname != 'mysql link' && $cname != 'mysql result' )
+            return false;
 
-if (!function_exists('session_unregister')) {
-    /**
-     * Unregister a global variable from the current session
-     * @link http://php.net/manual/en/function.session-unregister.php
-     * @param string $name <p>
-     * The variable name.
-     * </p>
-     * @return bool true on success or false on failure.
-     * @deprecated 5.3.0 This function has been DEPRECATED as of PHP 5.3.0 and REMOVED as of PHP 5.4.0.
-     * @since 4.0
-     * @since 5.0
-     */
-    function session_unregister($value){
-        unset($_SESSION[$value]);
+        if ( $onlyres && $cname != 'mysql result' )
+            return false;
+
+        unset ($cname);
         return true;
     }
-}
-if (!function_exists('session_register')) {
-    /**
-     * Register one or more global variables with the current session
-     * @link http://php.net/manual/en/function.session-register.php
-     * @param mixed $name <p>
-     * A string holding the name of a variable or an array consisting of
-     * variable names or other arrays.
-     * </p>
-     * @param mixed $_ [optional]
-     * @return bool true on success or false on failure.
-     * @deprecated 5.3.0 This function has been DEPRECATED as of PHP 5.3.0 and REMOVED as of PHP 5.4.0.
-     * @since 4.0
-     * @since 5.0
-     */
-    function session_register($variavel){
-        global $$variavel;
-        $_SESSION[$variavel] = $$variavel;
-        return true;
-    }
+
+    if ( ! is_object ($o) )
+        return false;
+
+    $cname = get_class ($o);
+    if ( $cname != 'mysqli' && $cname != 'mysqli_result' )
+        return false;
+
+    if ( $onlyres && $cname != 'mysqli_result' )
+        return false;
+
+    unset ($cname);
+    return true;
 }
 
-#
-# Mysql functions
-# Thanks to JoungKyun.Kim (https://github.com/OOPS-ORG-PHP/mysql-extension-wrapper)
-# 
-# Warning!
-# 1. You must enable mysqli extension.
-# 2. If you check return value by mysql_connect and mysql_result with is_resource(),
-#    you must change to is_myresource() from is_resource().
-#
 if ( ! function_exists ('mysql_connect') ) {
+
     if ( ! extension_loaded ('mysqli') ) {
         throw new Exception (E_ERROR, 'MySQL wrapper must need mysqli extension');
     }
@@ -339,45 +129,12 @@ if ( ! function_exists ('mysql_connect') ) {
         246 => 'real'        // decimal
     );
 
-    /**
-     * @param $o
-     * @param bool $onlyres
-     * @return bool
-     */
-    function is_myresource ($o, $onlyres = false) {
-        if ( extension_loaded ('mysql') ) {
-            if ( ! is_resource ($o) )
-                return false;
-    
-            $cname = get_resource_type ($o);
-            if ( $cname != 'mysql link' && $cname != 'mysql result' )
-                return false;
-    
-            if ( $onlyres && $cname != 'mysql result' )
-                return false;
-    
-            unset ($cname);
-            return true;
-        }
-    
-        if ( ! is_object ($o) )
-            return false;
-    
-        $cname = get_class ($o);
-        if ( $cname != 'mysqli' && $cname != 'mysqli_result' )
-            return false;
-    
-        if ( $onlyres && $cname != 'mysqli_result' )
-            return false;
-    
-        unset ($cname);
-        return true;
-    }
+
 
     /**     
      * Get number of affected rows in previous MySQL operation
      * @link http://php.net/manual/en/function.mysql-affected-rows.php
-     * @param resource $link_identifier [optional]
+     * @param resource $c [optional]
      * @return int the number of affected rows on success, and -1 if the last query
      * failed.
      * </p>
@@ -402,7 +159,7 @@ if ( ! function_exists ('mysql_connect') ) {
      */
     function mysql_affected_rows (&$c = null) {
         if ( ($c = mysql_global_resource ($c, 1 - func_num_args ())) == null )
-            return;
+            return null;
         return mysqli_affected_rows ($c);
     }
 
@@ -410,35 +167,35 @@ if ( ! function_exists ('mysql_connect') ) {
     /**     
      * Returns the name of the character set
      * @link http://php.net/manual/en/function.mysql-client-encoding.php
-     * @param resource $link_identifier [optional]
+     * @param resource $c [optional]
      * @return string the default character set name for the current connection.
      * @since 4.3.0
      * @since 5.0
      */
     function mysql_client_encoding (&$c = null) {
         if ( ($c = mysql_global_resource ($c, 1 - func_num_args ())) == null )
-            return;
+            return null;
         return mysqli_character_set_name ($c);
     }
 
     /**     
      * Close MySQL connection
      * @link http://php.net/manual/en/function.mysql-close.php
-     * @param resource $link_identifier [optional]
+     * @param resource $c [optional]
      * @return bool true on success or false on failure.
      * @since 4.0
      * @since 5.0
      */
     function mysql_close (&$c = null) {
         if ( ($c = mysql_global_resource ($c, 1 - func_num_args ())) == null )
-            return;
+            return null;
         return mysqli_close ($c);
     }
 
     /**     
      * Open a connection to a MySQL Server
      * @link http://php.net/manual/en/function.mysql-connect.php
-     * @param string $server [optional] <p>
+     * @param string $host [optional] <p>
      * The MySQL server. It can also include a port number. e.g.
      * "hostname:port" or a path to a local socket e.g. ":/path/to/socket" for
      * the localhost.
@@ -449,16 +206,16 @@ if ( ! function_exists ('mysql_connect') ) {
      * value is 'localhost:3306'. In &sqlsafemode;, this parameter is ignored
      * and value 'localhost:3306' is always used.
      * </p>
-     * @param string $username [optional] <p>
+     * @param string $user [optional] <p>
      * The username. Default value is defined by mysql.default_user. In
      * &sqlsafemode;, this parameter is ignored and the name of the user that
      * owns the server process is used.
      * </p>
-     * @param string $password [optional] <p>
+     * @param string $pass [optional] <p>
      * The password. Default value is defined by mysql.default_password. In
      * &sqlsafemode;, this parameter is ignored and empty password is used.
      * </p>
-     * @param bool $new_link [optional] <p>
+     * @param bool $link [optional] <p>
      * If a second call is made to <b>mysql_connect</b>
      * with the same arguments, no new link will be established, but
      * instead, the link identifier of the already opened link will be
@@ -468,7 +225,7 @@ if ( ! function_exists ('mysql_connect') ) {
      * before with the same parameters.
      * In &sqlsafemode;, this parameter is ignored.
      * </p>
-     * @param int $client_flags [optional] <p>
+     * @param int $flag [optional] <p>
      * The <i>client_flags</i> parameter can be a combination
      * of the following constants:
      * 128 (enable LOAD DATA LOCAL handling),
@@ -479,7 +236,7 @@ if ( ! function_exists ('mysql_connect') ) {
      * Read the section about for further information.
      * In &sqlsafemode;, this parameter is ignored.
      * </p>
-     * @return resource a MySQL link identifier on success or false on failure.
+     * @return mysqli a MySQL link identifier on success or false on failure.
      * @since 4.0
      * @since 5.0
      */
@@ -528,11 +285,11 @@ if ( ! function_exists ('mysql_connect') ) {
     /**
      * @param $name
      * @param null $c
-     * @return bool|mysqli_result|void
+     * @return bool|mysqli_result
      */
     function mysql_create_db ($name, $c = null) {
         if ( ($c = mysql_global_resource ($c, 2 - func_num_args ())) == null )
-            return;
+            return null;
 
         $name = trim ($name);
 
@@ -546,7 +303,7 @@ if ( ! function_exists ('mysql_connect') ) {
     /**
      * @param $name
      * @param null $c
-     * @return bool|mysqli_result|void
+     * @return bool|mysqli_result
      */
     function mysql_createdb ($name, $c = null) {
         return mysql_create_db ($name, $c);
@@ -556,8 +313,8 @@ if ( ! function_exists ('mysql_connect') ) {
     /**
      * Move internal result pointer
      * @link http://php.net/manual/en/function.mysql-data-seek.php
-     * @param resource $result
-     * @param int $row_number <p>
+     * @param mysqli_result $result
+     * @param int $offset <p>
      * The desired row number of the new result pointer.
      * </p>
      * @return bool true on success or false on failure.
@@ -592,7 +349,7 @@ if ( ! function_exists ('mysql_connect') ) {
     /**
      * Retrieves database name from the call to <b>mysql_list_dbs</b>
      * @link http://php.net/manual/en/function.mysql-db-name.php
-     * @param resource $result <p>
+     * @param mysqli_result $result <p>
      * The result pointer from a call to <b>mysql_list_dbs</b>.
      * </p>
      * @param int $row <p>
@@ -639,6 +396,7 @@ if ( ! function_exists ('mysql_connect') ) {
     /**
      * Selects a database and executes a query on it
      * @link http://php.net/manual/en/function.mysql-db-query.php
+     
      * @param string $database <p>
      * The name of the database that will be selected.
      * </p>
@@ -648,8 +406,8 @@ if ( ! function_exists ('mysql_connect') ) {
      * <p>
      * Data inside the query should be properly escaped.
      * </p>
-     * @param resource $link_identifier [optional]
-     * @return resource a positive MySQL result resource to the query result,
+     * @param resource $c [optional]
+     * @return mysqli_result a positive MySQL result resource to the query result,
      * or false on error. The function also returns true/false for
      * INSERT/UPDATE/DELETE
      * queries to indicate success/failure.
@@ -692,7 +450,7 @@ if ( ! function_exists ('mysql_connect') ) {
     /**
      * Returns the numerical value of the error message from previous MySQL operation
      * @link http://php.net/manual/en/function.mysql-errno.php
-     * @param resource $link_identifier [optional]
+     * @param resource $c [optional]
      * @return int the error number from the last MySQL function, or
      * 0 (zero) if no error occurred.
      * @since 4.0
@@ -708,7 +466,7 @@ if ( ! function_exists ('mysql_connect') ) {
     /**
      * Returns the text of the error message from previous MySQL operation
      * @link http://php.net/manual/en/function.mysql-error.php
-     * @param resource $link_identifier [optional]
+     * @param resource $c [optional]
      * @return string the error text from the last MySQL function, or
      * '' (empty string) if no error occurred.
      * @since 4.0
@@ -726,13 +484,31 @@ if ( ! function_exists ('mysql_connect') ) {
         }
 
         return mysqli_error ($c);
-    }   
+    }
+
+
+    if(!function_exists('mysql_escape_string')) {
+        /**
+         * Escapes a string for use in a mysql_query
+         * @link http://php.net/manual/en/function.mysql-escape-string.php
+         * @param string $escape <p>
+         * The string that is to be escaped.
+         * </p>
+         * @return string the escaped string.
+         * @since 4.0.3
+         * @since 5.0
+         */
+        function mysql_escape_string($escape)
+        {
+            return mysqli_real_escape_string($GLOBALS['_MySQLCON_'], $escape);
+        }
+    }
 
     /**
      * Fetch a result row as an associative array, a numeric array, or both
      * @link http://php.net/manual/en/function.mysql-fetch-array.php
-     * @param resource $result
-     * @param int $result_type [optional] <p>
+     * @param mysqli_result $result
+     * @param int $type [optional] <p>
      * The type of array that is to be fetched. It's a constant and can
      * take the following values: <b>MYSQL_ASSOC</b>,
      * <b>MYSQL_NUM</b>, and
@@ -779,7 +555,7 @@ if ( ! function_exists ('mysql_connect') ) {
     /**
      * Fetch a result row as an associative array
      * @link http://php.net/manual/en/function.mysql-fetch-assoc.php
-     * @param resource $result
+     * @param mysqli_result $result
      * @return array an associative array of strings that corresponds to the fetched row, or
      * false if there are no more rows.
      * </p>
@@ -813,8 +589,8 @@ if ( ! function_exists ('mysql_connect') ) {
     /**
      * Get column information from a result and return as an object
      * @link http://php.net/manual/en/function.mysql-fetch-field.php
-     * @param resource $result
-     * @param int $field_offset [optional] <p>
+     * @param mysqli_result $result
+     * @param int $offset [optional] <p>
      * The numerical field offset. If the field offset is not specified, the
      * next field that was not yet retrieved by this function is retrieved.
      * The <i>field_offset</i> starts at 0.
@@ -898,7 +674,7 @@ if ( ! function_exists ('mysql_connect') ) {
     /**
      * Get the length of each output in a result
      * @link http://php.net/manual/en/function.mysql-fetch-lengths.php
-     * @param resource $result
+     * @param mysqli_result $result
      * @return array An array of lengths on success or false on failure.
      * @since 4.0
      * @since 5.0
@@ -922,8 +698,8 @@ if ( ! function_exists ('mysql_connect') ) {
     /**
      * Fetch a result row as an object
      * @link http://php.net/manual/en/function.mysql-fetch-object.php
-     * @param resource $result
-     * @param string $class_name [optional] <p>
+     * @param mysqli_result $result
+     * @param string $classname [optional] <p>
      * The name of the class to instantiate, set the properties of and return.
      * If not specified, a <b>stdClass</b> object is returned.
      * </p>
@@ -986,7 +762,7 @@ if ( ! function_exists ('mysql_connect') ) {
     /**
      * Get a result row as an enumerated array
      * @link http://php.net/manual/en/function.mysql-fetch-row.php
-     * @param resource $result
+     * @param mysqli_result $result
      * @return array an numerical array of strings that corresponds to the fetched row, or
      * false if there are no more rows.
      * </p>
@@ -1018,8 +794,8 @@ if ( ! function_exists ('mysql_connect') ) {
     /**
      * Get the flags associated with the specified field in a result
      * @link http://php.net/manual/en/function.mysql-field-flags.php
-     * @param resource $result
-     * @param int $field_offset
+     * @param mysqli_result $result
+     * @param int $offset
      * @return string a string of flags associated with the result or false on failure.
      * </p>
      * <p>
@@ -1110,13 +886,13 @@ if ( ! function_exists ('mysql_connect') ) {
     /**
      * Returns the length of the specified field
      * @link http://php.net/manual/en/function.mysql-field-len.php
-     * @param resource $result
-     * @param int $field_offset
+     * @param mysqli_result $result
+     * @param int $offest
      * @return int The length of the specified field index on success or false on failure.
      * @since 4.0
      * @since 5.0
      */
-    function mysql_field_len ($result, $offest) {
+    function mysql_field_len ($result, $offset) {
         if ( ($r = mysqli_mysqli_fetch_field_direct ($result, $offset)) === false )
             return false;
 
@@ -1126,8 +902,8 @@ if ( ! function_exists ('mysql_connect') ) {
     /**
      * Get the name of the specified field in a result
      * @link http://php.net/manual/en/function.mysql-field-name.php
-     * @param resource $result
-     * @param int $field_offset
+     * @param mysqli_result $result
+     * @param int $offset
      * @return string The name of the specified field index on success or false on failure.
      * @since 4.0
      * @since 5.0
@@ -1142,8 +918,8 @@ if ( ! function_exists ('mysql_connect') ) {
     /**
      * Set result pointer to a specified field offset
      * @link http://php.net/manual/en/function.mysql-field-seek.php
-     * @param resource $result
-     * @param int $field_offset
+     * @param mysqli_result $result
+     * @param int $offset
      * @return bool true on success or false on failure.
      * @since 4.0
      * @since 5.0
@@ -1185,8 +961,8 @@ if ( ! function_exists ('mysql_connect') ) {
     /**
      * Get name of the table the specified field is in
      * @link http://php.net/manual/en/function.mysql-field-table.php
-     * @param resource $result
-     * @param int $field_offset
+     * @param mysqli_result $result
+     * @param int $offset
      * @return string The name of the table on success.
      * @since 4.0
      * @since 5.0
@@ -1201,8 +977,8 @@ if ( ! function_exists ('mysql_connect') ) {
     /**
      * Get the type of the specified field in a result
      * @link http://php.net/manual/en/function.mysql-field-type.php
-     * @param resource $result
-     * @param int $field_offset
+     * @param mysqli_result $result
+     * @param int $offset
      * @return string The returned field type
      * will be one of "int", "real",
      * "string", "blob", and others as
@@ -1221,7 +997,7 @@ if ( ! function_exists ('mysql_connect') ) {
     /**
      * Free result memory
      * @link http://php.net/manual/en/function.mysql-free-result.php
-     * @param resource $result
+     * @param mysqli_result $result
      * @return bool true on success or false on failure.
      * </p>
      * <p>
@@ -1263,7 +1039,7 @@ if ( ! function_exists ('mysql_connect') ) {
     /**
      * Get MySQL host info
      * @link http://php.net/manual/en/function.mysql-get-host-info.php
-     * @param resource $link_identifier [optional]
+     * @param resource $c [optional]
      * @return string a string describing the type of MySQL connection in use for the
      * connection or false on failure.
      * @since 4.0.5
@@ -1279,7 +1055,7 @@ if ( ! function_exists ('mysql_connect') ) {
     /**
      * Get MySQL protocol info
      * @link http://php.net/manual/en/function.mysql-get-proto-info.php
-     * @param resource $link_identifier [optional]
+     * @param resource $c [optional]
      * @return int the MySQL protocol on success or false on failure.
      * @since 4.0.5
      * @since 5.0
@@ -1294,7 +1070,7 @@ if ( ! function_exists ('mysql_connect') ) {
     /**
      * Get MySQL server info
      * @link http://php.net/manual/en/function.mysql-get-server-info.php
-     * @param resource $link_identifier [optional]
+     * @param resource $c [optional]
      * @return string the MySQL server version on success or false on failure.
      * @since 4.0.5
      * @since 5.0
@@ -1309,7 +1085,7 @@ if ( ! function_exists ('mysql_connect') ) {
     /**
      * Get information about the most recent query
      * @link http://php.net/manual/en/function.mysql-info.php
-     * @param resource $link_identifier [optional]
+     * @param resource $c [optional]
      * @return string information about the statement on success, or false on
      * failure. See the example below for which statements provide information,
      * and what the returned value may look like. Statements that are not listed
@@ -1327,7 +1103,7 @@ if ( ! function_exists ('mysql_connect') ) {
     /**
      * Get the ID generated in the last query
      * @link http://php.net/manual/en/function.mysql-insert-id.php
-     * @param resource $link_identifier [optional]
+     * @param resource $c [optional]
      * @return int The ID generated for an AUTO_INCREMENT column by the previous
      * query on success, 0 if the previous
      * query does not generate an AUTO_INCREMENT value, or false if
@@ -1345,7 +1121,7 @@ if ( ! function_exists ('mysql_connect') ) {
     /**
      * List databases available on a MySQL server
      * @link http://php.net/manual/en/function.mysql-list-dbs.php
-     * @param resource $link_identifier [optional]
+     * @param resource $c [optional]
      * @return resource a result pointer resource on success, or false on
      * failure. Use the <b>mysql_tablename</b> function to traverse
      * this result pointer, or any function for result tables, such as
@@ -1369,7 +1145,7 @@ if ( ! function_exists ('mysql_connect') ) {
      * @param string $table_name <p>
      * The name of the table that's being queried.
      * </p>
-     * @param resource $link_identifier [optional]
+     * @param resource $c [optional]
      * @return resource A result pointer resource on success, or false on
      * failure.
      * </p>
@@ -1393,7 +1169,7 @@ if ( ! function_exists ('mysql_connect') ) {
     /**
      * List MySQL processes
      * @link http://php.net/manual/en/function.mysql-list-processes.php
-     * @param resource $link_identifier [optional]
+     * @param resource $c [optional]
      * @return resource A result pointer resource on success or false on failure.
      * @since 4.3.0
      * @since 5.0
@@ -1411,7 +1187,7 @@ if ( ! function_exists ('mysql_connect') ) {
      * @param string $database <p>
      * The name of the database
      * </p>
-     * @param resource $link_identifier [optional]
+     * @param resource $c [optional]
      * @return resource A result pointer resource on success or false on failure.
      * </p>
      * <p>
@@ -1431,7 +1207,7 @@ if ( ! function_exists ('mysql_connect') ) {
     /**
      * Get number of fields in result
      * @link http://php.net/manual/en/function.mysql-num-fields.php
-     * @param resource $result
+     * @param mysqli_result $result
      * @return int the number of fields in the result set resource on
      * success or false on failure.
      * @since 4.0
@@ -1455,7 +1231,7 @@ if ( ! function_exists ('mysql_connect') ) {
     /**
      * Get number of rows in result
      * @link http://php.net/manual/en/function.mysql-num-rows.php
-     * @param resource $result <p>The result resource that is being evaluated. This result comes from a call to mysql_query().</p>
+     * @param mysqli_result $result <p>The result resource that is being evaluated. This result comes from a call to mysql_query().</p>
      * @return int <p>The number of rows in the result set on success or FALSE on failure. </p>
      * @since 4.0
      * @since 5.0
@@ -1478,7 +1254,7 @@ if ( ! function_exists ('mysql_connect') ) {
     /**
      * Open a persistent connection to a MySQL server
      * @link http://php.net/manual/en/function.mysql-pconnect.php
-     * @param string $server [optional] <p>
+     * @param string $host [optional] <p>
      * The MySQL server. It can also include a port number. e.g.
      * "hostname:port" or a path to a local socket e.g. ":/path/to/socket" for
      * the localhost.
@@ -1488,14 +1264,14 @@ if ( ! function_exists ('mysql_connect') ) {
      * mysql.default_host is undefined (default), then the default
      * value is 'localhost:3306'
      * </p>
-     * @param string $username [optional] <p>
+     * @param string $user [optional] <p>
      * The username. Default value is the name of the user that owns the
      * server process.
      * </p>
-     * @param string $password [optional] <p>
+     * @param string $pass [optional] <p>
      * The password. Default value is an empty password.
      * </p>
-     * @param int $client_flags [optional] <p>
+     * @param int $flag [optional] <p>
      * The <i>client_flags</i> parameter can be a combination
      * of the following constants:
      * 128 (enable LOAD DATA LOCAL handling),
@@ -1516,7 +1292,7 @@ if ( ! function_exists ('mysql_connect') ) {
     /**
      * Ping a server connection or reconnect if there is no connection
      * @link http://php.net/manual/en/function.mysql-ping.php
-     * @param resource $link_identifier [optional]
+     * @param resource $c [optional]
      * @return bool true if the connection to the server MySQL server is working,
      * otherwise false.
      * @since 4.3.0
@@ -1539,8 +1315,8 @@ if ( ! function_exists ('mysql_connect') ) {
      * The query string should not end with a semicolon.
      * Data inside the query should be properly escaped.
      * </p>
-     * @param resource $link_identifier [optional]
-     * @return resource For SELECT, SHOW, DESCRIBE, EXPLAIN and other statements returning resultset,
+     * @param resource $c [optional]
+     * @return mysqli_result For SELECT, SHOW, DESCRIBE, EXPLAIN and other statements returning resultset,
      * <b>mysql_query</b>
      * returns a resource on success, or false on
      * error.
@@ -1575,62 +1351,33 @@ if ( ! function_exists ('mysql_connect') ) {
 
         return mysqli_query ($c, $query);
     }
-    
-    if (!function_exists('mres')) {
-        /**
-         * Escape the same strings from mysql_real_escape_string, but this function does not need an active connection =)
-         * "Characters encoded are \, ', ", NUL (ASCII 0), \n, \r, and Control+Z"
-         * @see https://dev.mysql.com/doc/refman/5.7/en/mysql-real-escape-string.html
-         * @see https://stackoverflow.com/questions/1162491/alternative-to-mysql-real-escape-string-without-connecting-to-db
-         * @param string $value
-         * @return string
-         */
-        function mres($value)
-        {
-            $search = array("\\", "\x00", "\n", "\r", "'", '"', "\x1a");
-            $replace = array("\\\\", "\\0", "\\n", "\\r", "\'", '\"', "\\Z");
 
-            return str_replace($search, $replace, $value);
-        }
-    }
-
-    if (!function_exists('mysql_real_escape_string')) {
+    if(!function_exists('mysql_real_escape_string')) {
         /**
          * Escapes special characters in a string for use in an SQL statement
          * @link http://php.net/manual/en/function.mysql-real-escape-string.php
+         * @param string $unescaped_string <p>
          * The string that is to be escaped.
          * </p>
+         * @param resource $c [optional]
          * @return string the escaped string, or false on error.
          * @since 4.3.0
          * @since 5.0
          */
-        function mysql_real_escape_string($value)
+        function mysql_real_escape_string($escape, $c = null)
         {
-            return mres($value);
-        }
-    }
-    
-    if (!function_exists('mysql_escape_string')) {
-        /**
-         * Escapes a string for use in a mysql_query
-         * @link http://php.net/manual/en/function.mysql-escape-string.php
-         * @deprecated 5.3.0 Use mysql_real_escape_string() instead
-         * The string that is to be escaped.
-         * </p>
-         * @return string the escaped string.
-         * @since 4.0.3
-         * @since 5.0
-         */
-        function mysql_escape_string($value)
-        {
-            return mres($value);
+            if (($c = mysql_global_resource($c, 2 - func_num_args())) == null) {
+                return;
+            }
+
+            return mysqli_real_escape_string($c, $escape);
         }
     }
 
     /**
      * Get result data
      * @link http://php.net/manual/en/function.mysql-result.php
-     * @param resource $result
+     * @param mysqli_result $result
      * @param int $row <p>
      * The row number from the result that's being retrieved. Row numbers
      * start at 0.
@@ -1691,10 +1438,10 @@ if ( ! function_exists ('mysql_connect') ) {
     /**
      * Select a MySQL database
      * @link http://php.net/manual/en/function.mysql-select-db.php
-     * @param string $database_name <p>
+     * @param string $db <p>
      * The name of the database that is to be selected.
      * </p>
-     * @param resource $link_identifier [optional]
+     * @param resource $c [optional]
      * @return bool true on success or false on failure.
      * @since 4.0
      * @since 5.0
@@ -1711,7 +1458,7 @@ if ( ! function_exists ('mysql_connect') ) {
      * @param string $charset <p>
      * A valid character set name.
      * </p>
-     * @param resource $link_identifier [optional]
+     * @param resource $c [optional]
      * @return bool true on success or false on failure.
      * @since 5.2.3
      */
@@ -1725,7 +1472,7 @@ if ( ! function_exists ('mysql_connect') ) {
     /**
      * Get current system status
      * @link http://php.net/manual/en/function.mysql-stat.php
-     * @param resource $link_identifier [optional]
+     * @param resource $c [optional]
      * @return string a string with the status for uptime, threads, queries, open tables,
      * flush tables and queries per second. For a complete list of other status
      * variables, you have to use the SHOW STATUS SQL command.
@@ -1743,11 +1490,11 @@ if ( ! function_exists ('mysql_connect') ) {
     /**
      * Get table name of field
      * @link http://php.net/manual/en/function.mysql-tablename.php
-     * @param resource $result <p>
+     * @param mysqli_result $result <p>
      * A result pointer resource that's returned from
      * <b>mysql_list_tables</b>.
      * </p>
-     * @param int $i <p>
+     * @param int $offset <p>
      * The integer index (row/table number)
      * </p>
      * @return string The name of the table on success or false on failure.
@@ -1790,7 +1537,7 @@ if ( ! function_exists ('mysql_connect') ) {
     /**
      * Return the current thread ID
      * @link http://php.net/manual/en/function.mysql-thread-id.php
-     * @param resource $link_identifier [optional]
+     * @param resource $c [optional]
      * @return int The thread ID on success or false on failure.
      * @since 4.3.0
      * @since 5.0
@@ -1811,8 +1558,8 @@ if ( ! function_exists ('mysql_connect') ) {
      * <p>
      * Data inside the query should be properly escaped.
      * </p>
-     * @param resource $link_identifier [optional]
-     * @return resource For SELECT, SHOW, DESCRIBE or EXPLAIN statements,
+     * @param resource $c [optional]
+     * @return mysqli_result For SELECT, SHOW, DESCRIBE or EXPLAIN statements,
      * <b>mysql_unbuffered_query</b>
      * returns a resource on success, or false on
      * error.
@@ -1838,11 +1585,11 @@ if ( ! function_exists ('mysql_connect') ) {
 
     /**
      * @param null $c
-     * @return null|void
+     * @return null
      */
     function mysql_get_current_database ($c = null) {
         if ( ($c = mysql_global_resource ($c, 1 - func_num_args ())) == null )
-            return;
+            return null;
 
         $r = mysqli_query ($c, 'SELECT DATABASES() AS curdb');
         if ( ! is_object ($r) )

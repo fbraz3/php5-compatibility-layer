@@ -1,0 +1,17 @@
+{
+    "name": "fbraz3/php5-compatibility-layer",
+    "description": "Implementa de forma transparente funções que foram descontinuadas no PHP7",
+    "type": "library",
+    "license": "GPL-3.0",
+    "require": {
+        "php": "^7.0",
+      "ext-openssl": "*"
+    },
+    "autoload": {
+        "files": [
+            "src/wrapper-legacy.php",
+            "src/wrapper-mssql.php",
+            "src/wrapper-mysql.php"
+        ]
+    }
+}
