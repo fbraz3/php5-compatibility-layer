@@ -1,6 +1,6 @@
 {
     "name": "fbraz3/php5-compatibility-layer",
-    "description": "Implementa de forma transparente funções que foram descontinuadas no PHP7",
+    "description": "Implements discontinnued php5 functions on php7",
     "type": "library",
     "license": "GPL-3.0",
     "require": {
