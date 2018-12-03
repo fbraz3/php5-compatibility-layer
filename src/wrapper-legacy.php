@@ -6,6 +6,10 @@
  * Time: 13:33
  */
 
+if(version_compare(phpversion(), '7.0', '<')){
+    return;
+}
+
 if (!function_exists('ereg')) {
     function ereg($pattern, $subject, &$matches = array())
     {

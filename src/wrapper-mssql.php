@@ -6,6 +6,9 @@
  * Time: 17:16
  */
 
+if(version_compare(phpversion(), '7.0', '<')){
+    return;
+}
 
 // If mssql_connect() exists, there's no point in doing anything.
 if(!function_exists('mssql_connect')) {

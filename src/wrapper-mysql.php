@@ -17,6 +17,10 @@
  *
  */
 
+if(version_compare(phpversion(), '7.0', '<')){
+    return;
+}
+
 /**
  * @param $o
  * @param bool $onlyres
