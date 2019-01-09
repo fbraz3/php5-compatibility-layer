@@ -1,5 +1,5 @@
 # php5-compatibility-layer
-Implements discontinnued php5 functions on php7
+Implements discontinued php5 functions on php7
 
 Install via composer
 
